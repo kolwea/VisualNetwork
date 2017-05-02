@@ -14,13 +14,22 @@ import java.util.Set;
  *
  * @author Kolbe
  */
-public class Graph {
+public class Graph implements java.io.Serializable{
     private ArrayList<Neuron> vertices ;
     private HashMap<Neuron,Edge> edges;
     private static int index = 0;
+    private String name;
     
-    public Graph(){
-        
+    public Graph(String name){
+        this.name = name;
+    }
+    
+    public String getName(){
+        return name;
+    }
+    
+    public void setName(String name){
+        this.name = name;
     }
     
     public void addEdge(String name, String add){      
@@ -36,7 +45,7 @@ public class Graph {
             Neuron neuron2 = vertices.get(indyAdd);
             
             Edge iter = edges.get(neuron);
-            Edge addMe = new Edge(neuron2);        
+            Edge addMe = new Edge(neuron2); 
             Edge parent = null;
             
             if(iter == null){
@@ -44,8 +53,10 @@ public class Graph {
             }
             else{
                 while(iter != null){
-                    if(iter.neuron == addMe.neuron)
+                    if(iter.neuron == addMe.neuron){
+                        System.out.println("Neuron already present in adjacency list");
                         return;
+                    }
                     parent = iter;
                     iter = iter.next;
                 }
@@ -55,12 +66,17 @@ public class Graph {
         }
     }
     
+    public void addEdgeDub(String name, String name2){
+        addEdge(name, name2);
+        addEdge(name2, name);
+    }
+    
     public void addNeuron(Neuron neuron){
         if(vertices == null)
             vertices = new ArrayList();
         neuron.setIndex(index);
         vertices.add(index,neuron);
-        System.out.println("Adding neuron " + neuron.getName());
+//        System.out.println("Adding neuron " + neuron.getName());
         bumpIndex();
     }
    
@@ -74,20 +90,52 @@ public class Graph {
             if(a.getName().compareTo(name) == 0)
                 returnMe = a.getIndex();
         }
-        if(returnMe == -1)
-            System.out.println("Does not exist in list");
         return returnMe;
     }
     
     public static void bumpIndex(){
-        System.out.println("Index: " + index);
+//        System.out.println("Index: " + index);
         index++;
     }
     
+    public Edge getAdjHead(Neuron a){
+        if(edges == null){
+            System.out.println("Edges has not been defined");
+            return null;
+        }
+        else{
+            return edges.get(a);
+        }
+    }
+    
+    public Neuron getNeuron(String find){
+        Neuron returnMe = null;
+        for(Neuron a : vertices){
+            if(a.getName().compareTo(find) == 0)
+                returnMe = a;
+        }
+        System.out.println("Found it!");
+        return returnMe;
+    }
+    
+    public void update(){
+        for(Neuron a : vertices){
+            a.update();
+        }
+    }
+    
+    public ArrayList<Neuron> getAdjList(Neuron a){
+        int index = 0;
+        Edge head = this.getAdjHead(a);
+        ArrayList<Neuron> returnMe = new ArrayList();
+        
+        while(head != null){
+            returnMe.add(index, head.neuron);
+            head = head.next;
+            index++;
+        }
+        return returnMe;
+        
+    }
    
-   
-    
-    
-    
-    
 }

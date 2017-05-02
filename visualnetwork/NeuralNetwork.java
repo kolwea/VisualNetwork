@@ -8,9 +8,17 @@ package visualnetwork;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 import static jdk.nashorn.internal.objects.NativeMath.max;
 
 /**
@@ -19,9 +27,13 @@ import static jdk.nashorn.internal.objects.NativeMath.max;
  */
 public class NeuralNetwork {
     private AnchorPane vizPane;
+    private KeyFrame keyframe;
+    private Timeline timeline;
     private Graph network;
+    private Stage stage;
     
-    public NeuralNetwork(){
+    public NeuralNetwork(AnchorPane pane){
+        vizPane = pane;
     }
     
     public void setPane(AnchorPane pane){
@@ -32,40 +44,47 @@ public class NeuralNetwork {
         network = graph;
     }
     
+    public void setStage(Stage stage){
+        this.stage = stage;
+    }
+    
     public void createFake(){
         if(network == null)
-            network = new Graph();
+            network = new Graph("Test");
         
-        network.addNeuron(new Neuron("Sun"));
-        network.addNeuron(new Neuron("Red"));
-        network.addNeuron(new Neuron("Green"));
-        network.addNeuron(new Neuron("Large"));
-        network.addNeuron(new Neuron("Medium"));
-        network.addNeuron(new Neuron("Size"));
-        network.addNeuron(new Neuron("Small"));
-        network.addNeuron(new Neuron("Color"));
-        network.addNeuron(new Neuron("Temp"));
-        network.addNeuron(new Neuron("Hot"));
-        network.addNeuron(new Neuron("Brown"));
-        network.addNeuron(new Neuron("Cold"));
-        network.addNeuron(new Neuron("Moon"));
-        network.addNeuron(new Neuron("House"));
-        network.addNeuron(new Neuron("Lamp"));
-        network.addNeuron(new Neuron("Grey"));
-        network.addNeuron(new Neuron("Purple"));
-        network.addNeuron(new Neuron("Pink"));
-        network.addNeuron(new Neuron("Desk"));
-        network.addNeuron(new Neuron("Wood"));
-        network.addNeuron(new Neuron("Drawer"));
+        network.addNeuron(new Neuron("Sun",vizPane));
+        network.addNeuron(new Neuron("Red",vizPane));
+        network.addNeuron(new Neuron("Green",vizPane));
+        network.addNeuron(new Neuron("Large",vizPane));
+        network.addNeuron(new Neuron("Medium",vizPane));
+        network.addNeuron(new Neuron("Size",vizPane));
+        network.addNeuron(new Neuron("Small",vizPane));
+        network.addNeuron(new Neuron("Color",vizPane));
+        network.addNeuron(new Neuron("Temp",vizPane));
+        network.addNeuron(new Neuron("Hot",vizPane));
+        network.addNeuron(new Neuron("Brown",vizPane));
+        network.addNeuron(new Neuron("Cold",vizPane));
+        network.addNeuron(new Neuron("Moon",vizPane));
+        network.addNeuron(new Neuron("House",vizPane));
+        network.addNeuron(new Neuron("Lamp",vizPane));
+        network.addNeuron(new Neuron("Grey",vizPane));
+        network.addNeuron(new Neuron("Purple",vizPane));
+        network.addNeuron(new Neuron("Pink",vizPane));
+        network.addNeuron(new Neuron("Desk",vizPane));
+        network.addNeuron(new Neuron("Wood",vizPane));
+        network.addNeuron(new Neuron("Drawer",vizPane));
         
         network.addEdge("Sun", "Red");
         network.addEdge("Sun", "Large");
         network.addEdge("Sun", "Hot");
         network.addEdge("Sun", "Fake");
-        network.addEdge("Size", "Large");
-        network.addEdge("Color", "Red");
-        network.addEdge("Color", "Green");
-        network.addEdge("Color", "Brown");
+        network.addEdgeDub("Size", "Large");
+        network.addEdgeDub("Color", "Red");
+        network.addEdgeDub("Color", "Green");
+        network.addEdgeDub("Color", "Brown");
+        network.addEdgeDub("Color", "Brown");
+        
+        setup();
            
 //        Sun.add(Red);
 //        Sun.add(Large);
@@ -87,30 +106,61 @@ public class NeuralNetwork {
 //        Medium.add(Size);
     }
     
-    public void draw(){
-        ArrayList<Neuron> neurons = network.getVertices();
-        for(Neuron a : neurons){
-            Ellipse hold = new Ellipse();
-            hold.setRadiusX(30);
-            hold.setRadiusY(30);
-            hold.setFill(Color.BURLYWOOD);
-            hold.setCenterX(getRandomX());
-            hold.setCenterY(getRandomY());
-            vizPane.getChildren().add(hold);
+    public void setup(){
+        setupNetwork();
+        setupTimeline();
+        timeline.play();
+    }
+    private void setupNetwork(){
+        if(network == null){
+            System.out.println("Network hasn't been initialized. Please choose a neural graph to use.");
+            return;
+        }
+        for(Neuron a : network.getVertices()){
+            vizPane.getChildren().add(a.getBody());
         }
     }
     
-    private double getRandomX(){
-        double width = vizPane.getWidth();
-        double randomNum = Math.random()*width;
-        System.out.print("X: " + randomNum);
-        return randomNum;
+    public void search(String a){
+        Query hold = new Query();
+        hold.setGraph(network);
+        hold.DFS(network.getNeuron(a));
+    }
+    public void searchPaths(String a, String b){
+        Query hold = new Query();
+        hold.setGraph(network);
+        hold.DFSpath(network.getNeuron(a),network.getNeuron(b));
+        hold.showSavedPaths();
+    }
+
+    
+    private void setupTimeline(){
+        keyframe = new KeyFrame(Duration.millis(10), (ActionEvent event) -> {
+            if(network == null)
+                System.out.println("This null nigga");
+            network.update();
+        });
+        timeline = new Timeline(keyframe);
+        timeline.setCycleCount(Animation.INDEFINITE);
     }
     
-    private double getRandomY(){
-        double height =  vizPane.getHeight();
-        double randomNum = Math.random()*height;
-        System.out.println(" Y: " + randomNum);
-        return randomNum;
+    public void saveGraph(){
+        SaveGraph saveGraph = new SaveGraph();
+        saveGraph.setStage(stage);
+        saveGraph.save(network, network.getName());
     }
+    
+    public void openGraph(){
+        OpenGraph openGraph = new OpenGraph();
+        openGraph.setStage(stage);
+        System.out.println("Stage is set!");
+        this.network = openGraph.open();
+        System.out.println("Done loading!");
+        for(Neuron a: network.getVertices()){
+            System.out.println(a.getName());
+            a.setup(vizPane);
+        }
+        setup();
+    }
+
 }

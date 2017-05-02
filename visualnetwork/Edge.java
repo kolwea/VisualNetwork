@@ -9,7 +9,7 @@ package visualnetwork;
  *
  * @author Kolbe
  */
-public class Edge {
+public class Edge implements java.io.Serializable{
     public Neuron neuron = null;
     public double weight = 0.0;
     public Edge next = null;
