@@ -8,6 +8,8 @@ package visualnetwork;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 /**
  *
@@ -19,24 +21,16 @@ public class Neuron extends Particle implements java.io.Serializable{
     public Status status;
     public Neuron parent;
     public int d,f;
+    private Text label;
 
-    public Neuron(String name){
-        this.name = name;
-        this.setBody(new Ellipse());
-        this.initial();
-    }
     
     public Neuron(String name,AnchorPane a){
         this.name = name;
-        this.setBody(new Ellipse());
-        this.setPane(a);
-        this.initial();
+        this.initial(a);
     }
     
     public void setup(AnchorPane pane){
-        this.setBody(new Ellipse());
-        this.setPane(pane);
-        this.initial();
+        this.initial(pane);
     }
     
     public String getName(){
@@ -67,7 +61,7 @@ public class Neuron extends Particle implements java.io.Serializable{
                 break;
         }
     }
-
+    
     @Override
     public void update() {
         if(pos.x > this.getPane().getWidth() || pos.x < 0)
@@ -77,6 +71,8 @@ public class Neuron extends Particle implements java.io.Serializable{
         pos = pos.add(vel);
         getBody().setCenterX(pos.x);
         getBody().setCenterY(pos.y);
+        label.setX(pos.x);
+        label.setY(pos.y);
     }    
     
 }

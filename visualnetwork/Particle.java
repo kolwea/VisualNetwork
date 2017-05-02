@@ -8,6 +8,8 @@ package visualnetwork;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 /**
  *
@@ -19,6 +21,7 @@ public abstract class Particle {
     private Ellipse body;
     private double radius = 10.0;
     private AnchorPane vizPane;
+    private Text label;
 
     
     public Particle(){
@@ -52,16 +55,19 @@ public abstract class Particle {
     
     abstract public void update();
     
-    public void initial(){
-            body.setRadiusX(30);
-            body.setRadiusY(30);
-            body.setFill(Color.BURLYWOOD);
-            pos = new Vector(getRandomX(), getRandomY());
-            vel = new Vector(Math.random()*5,Math.random()*5);
-//            body.setCenterX(getRandomX());
-//            body.setCenterY(getRandomY());          
+    public void initial(AnchorPane a){
+        if(body == null)
+            body = new Ellipse();
+        if(label == null)
+            label = new Text();
+        vizPane = a;
+        body.setRadiusX(30);
+        body.setRadiusY(30);
+        body.setFill(Color.BURLYWOOD);
+        pos = new Vector(getRandomX(), getRandomY());
+        vel = new Vector(Math.random()*5,Math.random()*5);  
     }
-    
+        
     
     private double getRandomX(){
         double width = vizPane.getWidth();

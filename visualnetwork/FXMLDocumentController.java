@@ -69,9 +69,7 @@ public class FXMLDocumentController implements Initializable {
         network.setStage(stage);
         network.saveGraph();
     }
-    
-    
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -88,8 +86,6 @@ public class FXMLDocumentController implements Initializable {
        
         
         test.setOnAction((ActionEvent event)-> {
-            System.out.println("You clicked me!");
-
             network.createFake();
         });
         
@@ -103,7 +99,6 @@ public class FXMLDocumentController implements Initializable {
         
         open.setOnAction((ActionEvent event) -> {
             network.openGraph();
-
         });
         
         menuBar.getMenus().add(loadNet);

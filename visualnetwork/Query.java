@@ -40,7 +40,7 @@ public class Query extends Thread{
             a.d = 0;
             a.f = 0;
         }
-        System.out.println("Initialized for search");
+//        System.out.println("Initialized for search");
         time = 0;
         for(Neuron a : network.getVertices()){
             if(a.status == Status.WHITE)
@@ -57,7 +57,7 @@ public class Query extends Thread{
             a.d = 0;
             a.f = 0;
         }
-        System.out.println("Initialized for search");
+//        System.out.println("Initialized for search");
         time = 0;
         for(Neuron a : network.getAdjList(start)){
             if(a.status == Status.WHITE)
@@ -91,7 +91,7 @@ public class Query extends Thread{
     }
     
     private void DFSpathVisit(Neuron cur, Neuron search){
-        System.out.println(cur.getName());
+//        System.out.println(cur.getName());
         if(cur == search){
 //            showPath(cur);
             savePath(cur);

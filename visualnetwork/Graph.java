@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Ellipse;
 
 /**
  *
@@ -19,9 +21,15 @@ public class Graph implements java.io.Serializable{
     private HashMap<Neuron,Edge> edges;
     private static int index = 0;
     private String name;
+    private AnchorPane vizPane;
+    private ArrayList<Ellipse> bodies;
     
-    public Graph(String name){
+    public Graph(String name, AnchorPane pane){
         this.name = name;
+        vizPane = pane;
+        vertices = new ArrayList();
+        edges = new HashMap();
+        bodies = new ArrayList();
     }
     
     public String getName(){
@@ -76,6 +84,7 @@ public class Graph implements java.io.Serializable{
             vertices = new ArrayList();
         neuron.setIndex(index);
         vertices.add(index,neuron);
+        bodies.add(neuron.getBody());
 //        System.out.println("Adding neuron " + neuron.getName());
         bumpIndex();
     }
@@ -118,6 +127,10 @@ public class Graph implements java.io.Serializable{
         return returnMe;
     }
     
+    public ArrayList<Ellipse> getBodies(){
+        return bodies;
+    }
+    
     public void update(){
         for(Neuron a : vertices){
             a.update();
@@ -136,6 +149,66 @@ public class Graph implements java.io.Serializable{
         }
         return returnMe;
         
+    }
+    
+    private void setupNetwork(){
+        vizPane.getChildren().addAll(getBodies());
+    }
+   
+    //Create test graph;
+    public void createFake(){
+        
+        addNeuron(new Neuron("Tree",vizPane));
+        addNeuron(new Neuron("Wood",vizPane));
+        addNeuron(new Neuron("Leaf",vizPane));
+        addNeuron(new Neuron("Branch",vizPane));
+        addNeuron(new Neuron("Trunk",vizPane));
+        addNeuron(new Neuron("Grass",vizPane));
+        addNeuron(new Neuron("Forest",vizPane));
+        addNeuron(new Neuron("Green",vizPane));
+        addNeuron(new Neuron("Yellow",vizPane));
+        addNeuron(new Neuron("Orange",vizPane));
+        addNeuron(new Neuron("Brown",vizPane));
+        addNeuron(new Neuron("Bird",vizPane));
+        addNeuron(new Neuron("Raven",vizPane));
+        addNeuron(new Neuron("Sparrow",vizPane));
+        addNeuron(new Neuron("Flower",vizPane));
+        addNeuron(new Neuron("Rose",vizPane));
+        addNeuron(new Neuron("Tulip",vizPane));
+        addNeuron(new Neuron("Dandelion",vizPane));
+        addNeuron(new Neuron("Deer",vizPane));
+        addNeuron(new Neuron("Wood",vizPane));
+        addNeuron(new Neuron("Drawer",vizPane));
+        
+        setupNetwork();
+        
+//        network.addEdgeDub("Sun", "Red");
+//        network.addEdgeDub("Sun", "Large");
+//        network.addEdgeDub("Sun", "Hot");
+//        network.addEdgeDub("Size", "Large");
+//        network.addEdgeDub("Color", "Red");
+//        network.addEdgeDub("Color", "Green");
+//        network.addEdgeDub("Color", "Brown");
+//        network.addEdgeDub("", name2);
+           
+//        Sun.add(Red);
+//        Sun.add(Large);
+//        Sun.add(Hot);
+//        Size.add(Large);
+//        Color.add(Red);
+//        Color.add(Brown);
+//        Color.add(Green);
+//        Green.add(Color);
+//        Red.add(Color);
+//        Temp.add(Hot);
+//        Temp.add(Cold);
+//        Hot.add(Temp);
+//        Cold.add(Temp);
+//        Size.add(Small);
+//        Small.add(Size);
+//        Large.add(Size);
+//        Size.add(Medium);
+//        Medium.add(Size);
     }
    
 }
