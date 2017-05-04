@@ -6,6 +6,8 @@
 package visualnetwork;
 
 import javafx.application.Application;
+import static javafx.application.ConditionalFeature.FXML;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,12 +21,19 @@ public class VisualNetwork extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+//        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLDocument.fxml"));
+        Parent root = loader.load();
+        FXMLDocumentController controller = loader.getController();
         
         Scene scene = new Scene(root);
         
+        controller.setStage(stage);
+        
         stage.setScene(scene);
         stage.show();
+        
+
     }
 
     /**
