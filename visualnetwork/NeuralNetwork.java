@@ -6,20 +6,14 @@
 package visualnetwork;
 
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Ellipse;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import static jdk.nashorn.internal.objects.NativeMath.max;
 
 /**
  *
@@ -29,33 +23,44 @@ public class NeuralNetwork {
     private AnchorPane vizPane;
     private KeyFrame keyframe;
     private Timeline timeline;
-    private Graph network;
     private Stage stage;
+    private Text label;
+    private int index;
+    public ArrayList<Network> networkArray;
     
     public NeuralNetwork(AnchorPane pane){
         vizPane = pane;
+        networkArray = new ArrayList();
+        setup();
     }
     
     public void setPane(AnchorPane pane){
         vizPane = pane;
     }
     
-    public void setGraph(Graph graph){
-        network = graph;
-    }
-    
     public void setStage(Stage stage){
         this.stage = stage;
     }
     
-    public void createFake(){
-        if(network == null)
-            network = new Graph("TestGraph", vizPane);
-        network.createFake();
+    public void setLabel(Text label){
+        this.label = label;
     }
     
-    public void createGraph(String text){
-        network = new Graph(text, vizPane);
+    public void createFake(){
+        Network hold;
+        hold = new Network("Test Graph");
+        hold.setPane(vizPane);
+        hold.createFake();
+        this.addNetwork(hold);
+        label.setText(hold.getName());
+        hold.connectFake();
+    }
+    
+    public void createNetwork(String text){
+        Network hold = new Network(text);
+        hold.setPane(vizPane);
+        this.addNetwork(hold);
+        label.setText(hold.getName());
     }
     
     public void setup(){
@@ -63,30 +68,51 @@ public class NeuralNetwork {
         timeline.play();
     }
     
-    public void search(String a){
+    public void search(Network network, String a){
         Query hold = new Query();
         hold.setGraph(network);
         hold.DFS(network.getNeuron(a));
     }
-    public void searchPaths(String a, String b){
+    
+    public void searchPaths(Network network, String a, String b){
         Query hold = new Query();
         hold.setGraph(network);
         hold.DFSpath(network.getNeuron(a),network.getNeuron(b));
         hold.showSavedPaths();
     }
 
-    
     private void setupTimeline(){
-        keyframe = new KeyFrame(Duration.millis(10), (ActionEvent event) -> {
-            if(network == null)
-                System.out.println("This null nigga");
-            network.update();
+        keyframe = new KeyFrame(Duration.millis(100), (ActionEvent event) -> {
+            for(Network network : networkArray)
+                network.update();
         });
         timeline = new Timeline(keyframe);
         timeline.setCycleCount(Animation.INDEFINITE);
     }
     
-    public void saveGraph(){
+    private void addNetwork(Network addMe){
+        networkArray.add(index,addMe);
+        addNeuronsToScene(addMe);
+        index++;
+    }
+    
+    private void addNeuronsToScene(Network network){
+        if(network == null)
+            return;
+        for(Neuron a : network.getVertices()){
+            vizPane.getChildren().add(a.getBody());
+        }
+    }
+    
+    private void addConexToScene(Network network){
+        if(network == null)
+            return;
+        for(Connection a : network.getConexs()){
+            vizPane.getChildren().add(a.getBody());
+        }
+    }
+    
+    public void saveGraph(Network network){
         SaveGraph saveGraph = new SaveGraph();
         saveGraph.setStage(stage);
         saveGraph.save(network, network.getName());
@@ -96,21 +122,21 @@ public class NeuralNetwork {
         OpenGraph openGraph = new OpenGraph();
         openGraph.setStage(stage);
         System.out.println("Stage is set!");
-        Graph hold = openGraph.open();
+        Network hold = openGraph.open();
         if(hold != null){
-            network = hold;
-            for(Neuron a: network.getVertices()){
-                a.setup(vizPane);
-            }
-            setup();
+            hold.setPane(vizPane);
+            hold.initializeNeurons();
             System.out.println("Done loading!");
+            addNetwork(hold);
         }
         else{
-            System.out.println("Graph not opened");
+            System.out.println("Graph not opened!");
         }
     }
     
-
-    
+    public void showConex(){
+        networkArray.get(0).createHeadConex((Particle)networkArray.get(0).getVertices().get(0), (Particle)networkArray.get(0).getVertices().get(1));
+        networkArray.get(0).createHeadConex((Particle)networkArray.get(0).getVertices().get(1), (Particle)networkArray.get(0).getVertices().get(2));
+    }
 
 }

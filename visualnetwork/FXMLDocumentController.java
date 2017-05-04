@@ -14,11 +14,14 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -31,70 +34,101 @@ public class FXMLDocumentController implements Initializable {
     private Label label;
     
     @FXML
-    private AnchorPane vizPane;
+    private AnchorPane window;
     
     @FXML
-    private MenuBar menuBar;
+    private AnchorPane vizPane;
     
-    private Menu loadNet;
+    
+    private AnchorPane currentMenuPane;
+    @FXML
+    private SplitPane splitPane;
+    @FXML
+    private AnchorPane networkPane;
+    @FXML
+    private AnchorPane settingsPane;
+    
+    
+    
+    @FXML
+    private Text networkLabel;
+    
+    private MenuBar menuBar;
     
     private NeuralNetwork network;
     
     private Stage stage;
-
     
-    @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        network = new NeuralNetwork(vizPane);
-        network.createFake();
-        network.setup();
-//        tryout.draw();
-//        tryout.search("Red");
-    }
-    
+    private boolean menuOpen;
+  
     @FXML
     private void handleButton2(ActionEvent event) {
-        System.out.println("You clicked me!");
-//        network.search("Red");
-        network.searchPaths("Sun", "Color");
+        toggleStage();
     }
+    
+    @FXML
+    private void gotoNetworkPane(ActionEvent event){
+    }
+    
+    private void toggleStage(){        
+        if(menuOpen){
+            settingsPane.setMinSize(window.getWidth()/4, window.getHeight());
+            vizPane.setMinSize(window.getWidth()/4 * 3, window.getHeight());
+        }
+        else{
+            settingsPane.setMinSize(0, window.getHeight());
+            vizPane.setMinSize(window.getWidth(), window.getHeight());
+        }
+        menuOpen = !menuOpen;
+    }
+    
+    
+    private void goToNetworkPane(){
+        networkPane.setMinWidth(settingsPane.getWidth());
+        networkPane.setMinHeight(settingsPane.getHeight());
+        settingsPane = networkPane;
+    }
+        
     
     public void setStage(Stage stage){
         this.stage = stage;
-    }
-    
-    @FXML
-    private void save(Graph g){
-        network.setStage(stage);
-        network.saveGraph();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        menuOpen = true;
         menuBar = new MenuBar();
-        loadNet = new Menu("Menu");
+        Menu loadNet = new Menu("File");
         network = new NeuralNetwork(vizPane);
+        network.setLabel(networkLabel);
         
-        MenuItem test = new MenuItem("Load");
-        MenuItem showPaths = new MenuItem("Search");
-        MenuItem save = new MenuItem("Save");
-        MenuItem open = new MenuItem("Open");
+        MenuItem test = new MenuItem("Load Test ");
+        MenuItem showPaths = new MenuItem("Show Path");
+        MenuItem search = new MenuItem("Search");
+        MenuItem save = new MenuItem("Save Network");
+        MenuItem open = new MenuItem("Open Network");
+        MenuItem saveN = new MenuItem("Save Neural Network");
+        MenuItem openN = new MenuItem("Open Neural Network");
 
-        loadNet.getItems().addAll(test,showPaths,save,open);
+        loadNet.getItems().addAll(test,showPaths,search,save,open,saveN,openN);
        
         
         test.setOnAction((ActionEvent event)-> {
             network.createFake();
+        });        
+        
+        search.setOnAction((ActionEvent event)-> {
+            network.searchPaths(network.networkArray.get(0),"Forest","Color");
         });
         
         showPaths.setOnAction((ActionEvent event) -> {
-            network.searchPaths("Sun", "Color");
+//            network.searchPaths("Sun", "Color");
+                network.showConex();
         });
         
         save.setOnAction((ActionEvent event) -> {
-            network.saveGraph();
+//            network.saveGraph();
         });
         
         open.setOnAction((ActionEvent event) -> {
@@ -103,10 +137,11 @@ public class FXMLDocumentController implements Initializable {
         
         menuBar.getMenus().add(loadNet);
         
-        vizPane.getChildren().add(menuBar);
+        settingsPane.getChildren().add(menuBar);
         
- 
     }    
+    
+    
 
     
     

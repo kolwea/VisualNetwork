@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" fx:id="networkPane" prefHeight="588.0" prefWidth="300.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="visualnetwork.FXMLDocumentController">
+    <stylesheets>
+        <URL value="@networkdoc.css" />
+    </stylesheets>
+   <children>
+      <Text layoutX="23.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Network" wrappingWidth="218.341796875">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

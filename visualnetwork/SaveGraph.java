@@ -29,15 +29,11 @@ public class SaveGraph {
         
     }
     
-    public SaveGraph(Graph saveMe, String filename){
-        
-    }
-    
     public void setStage(Stage stage){
         this.stage = stage;
     }
     
-    public void save(Graph saveMe, String filename){
+    public void save(Network saveMe, String filename){
         try {
             File saveFile = handleFile(filename);
             
@@ -58,7 +54,7 @@ public class SaveGraph {
     
     private File handleFile(String filename){
         FileChooser fileChoose = new FileChooser();
-        fileChoose.setTitle("Save Graph");
+        fileChoose.setTitle("Save Network");
         fileChoose.setInitialFileName(filename);
         fileChoose.setInitialDirectory(new File("src/visualnetwork/GraphLibs"));
 

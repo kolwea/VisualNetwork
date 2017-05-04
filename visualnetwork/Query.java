@@ -6,13 +6,14 @@
 package visualnetwork;
 
 import java.util.ArrayList;
+import javafx.scene.paint.Color;
 
 /**
  *
  * @author Kolbe
  */
 public class Query extends Thread{
-    private Graph network;
+    private Network network;
     private static int time;
     private ArrayList<Edge> paths;
     private int index;
@@ -26,7 +27,7 @@ public class Query extends Thread{
     }
     
     
-    public void setGraph(Graph set){
+    public void setGraph(Network set){
         network = set;
     }
     
@@ -72,9 +73,7 @@ public class Query extends Thread{
         }
         time++;
         cur.d = time;
-//        System.out.println(cur.getName() + "-Discovered: " + cur.d);
         cur.setStatus(Status.GREY);
-//        network.update();
         Edge head = network.getAdjHead(cur);
         while(head != null){
             if(head.neuron.status == Status.WHITE){
@@ -84,16 +83,14 @@ public class Query extends Thread{
             head = head.next;
         }
         cur.setStatus(Status.BLACK);
-//        network.update();
         time++;
         cur.f = time;
 //        System.out.println(cur.getName() + "-Finished: " + cur.f);
     }
     
     private void DFSpathVisit(Neuron cur, Neuron search){
-//        System.out.println(cur.getName());
+        System.out.println("Visitin " + cur.getName());
         if(cur == search){
-//            showPath(cur);
             savePath(cur);
         }
         else{
@@ -102,7 +99,7 @@ public class Query extends Thread{
             while(head != null){
                 if(head.neuron.status == Status.WHITE){
                     head.neuron.parent = cur;
-                    DFSvisit(head.neuron, search);
+                    DFSpathVisit(head.neuron, search);
                 }
                 head = head.next;
             }
@@ -133,18 +130,21 @@ public class Query extends Thread{
             hold = hold.parent;
         }
         paths.add(index,cur);
+        index++;
+        System.out.println("Path added at " + index);
     }
     
-    public void showSavedPaths(){
+    public void showSavedPaths(){              
         for(Neuron a : network.getVertices()){
             a.setStatus(Status.WHITE);
         }
         for(Edge head : paths){
             while(head != null){
                 System.out.print(head.neuron.getName() + " : ");
-                head.neuron.setStatus(Status.BLACK);
+                head.neuron.setStatus(Status.GREY);
                 head = head.next;
             }
+            System.out.println();
         }
     }
     
