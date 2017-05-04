@@ -5,11 +5,8 @@
  */
 package visualnetwork;
 
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Ellipse;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 
 /**
  *
@@ -24,13 +21,10 @@ public class Neuron extends Particle implements java.io.Serializable{
     private Text label;
 
     
-    public Neuron(String name,AnchorPane a){
+    public Neuron(String name){
         this.name = name;
-        this.initial(a);
-    }
-    
-    public void setup(AnchorPane pane){
-        this.initial(pane);
+        this.initial();
+//        System.out.println("Setup for " + name + " completed.");
     }
     
     public String getName(){
@@ -71,9 +65,16 @@ public class Neuron extends Particle implements java.io.Serializable{
         pos = pos.add(vel);
         getBody().setCenterX(pos.x);
         getBody().setCenterY(pos.y);
-        label.setX(pos.x);
-        label.setY(pos.y);
+//        if(this.getLines() != null){
+//            this.updateLines(head);
+//        }
+//        if(this.getName().compareTo("Wood") == 0)
+//            System.out.println("X: " + this.pos.x + " Y: " + this.pos.y);
+//        label.setX(pos.x);
+//        label.setY(pos.y);
     }    
+    
+    
     
 }
 

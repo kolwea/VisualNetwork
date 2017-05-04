@@ -33,16 +33,16 @@ public class OpenGraph {
         this.stage = stage;
     }
     
-    public Graph open(){
+    public Network open(){
         System.out.println("Starting Open!");
         File openFile = handleFile();
         System.out.println("File HANDLED!");
-        Graph done = null;
+        Network done = null;
         try {
             FileInputStream fI = new FileInputStream(openFile);
             ObjectInputStream objIn = new ObjectInputStream(fI);
             
-            done = (Graph)objIn.readObject();
+            done = (Network)objIn.readObject();
             objIn.close();
             
         } catch (FileNotFoundException ex) {
@@ -63,7 +63,7 @@ public class OpenGraph {
     
     private File handleFile(){
         FileChooser fileChoose = new FileChooser();
-        fileChoose.setTitle("Open Graph");
+        fileChoose.setTitle("Open Network");
         fileChoose.setInitialDirectory(new File("src/visualnetwork/GraphLibs"));
         return fileChoose.showOpenDialog(stage);
         
