@@ -29,6 +29,11 @@ public class Network extends Graph implements java.io.Serializable{
         createMe(name);
     }
     
+//    public void updateLines(){
+//        
+//    }
+    
+    
     public void createMe(String name){
         this.name = name;
         vertices = new ArrayList();
@@ -83,6 +88,7 @@ public class Network extends Graph implements java.io.Serializable{
 
     }
     
+    //Creates test graph
     public void connectFake(){
                 
         addEdgeDub("Wood", "Tree");
@@ -105,28 +111,27 @@ public class Network extends Graph implements java.io.Serializable{
         
     }
     
+    //Updates all the nodes in this network
     public void update(){
         for(Neuron a : vertices){
             a.update();
-//            Edge hold = getAdjHead(a);
-//            while(hold != null){
-//                
-//            }
+            a.updateLines(this.getAdjHead(a));
         }
-        for(int i = 0; i<1 ; i++){
-            for(Connection cone : conex){
-                cone.update();
-            }
-        }        
-        for(Connection q : queue){
-            if(conex.contains(q));
-            else{
-                conex.add(q);
-            }
-        } 
-        queue = new ArrayList();
+//        for(int i = 0; i<1 ; i++){
+//            for(Connection cone : conex){
+//                cone.update();
+//            }
+//        }        
+//        for(Connection q : queue){
+//            if(conex.contains(q));
+//            else{
+//                conex.add(q);
+//            }
+//        } 
+//        queue = new ArrayList();
     }
     
+    //Creates a connection using the node method. 
     public void createConex(Connection cool){
 //        Connection cool = new Connection(a,b);
         cool.setNetwork(this);
@@ -135,6 +140,7 @@ public class Network extends Graph implements java.io.Serializable{
         vizPane.getChildren().add(0,cool.getBody());
     }
     
+    //Creates the snake head one.
     public void createHeadConex(Particle a, Particle b){
         Connection cool = new Connection(a,b);
         cool.setNetwork(this);
