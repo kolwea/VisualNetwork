@@ -9,9 +9,10 @@ import java.util.ArrayList;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -24,9 +25,11 @@ public class NeuralNetwork {
     private KeyFrame keyframe;
     private Timeline timeline;
     private Stage stage;
-    private Text label;
     private int index;
     public ArrayList<Network> networkArray;
+    private ObservableList<Neuron> nodes;
+    
+    public Double nodeSpeed = 0.2;
     
     public NeuralNetwork(AnchorPane pane){
         vizPane = pane;
@@ -42,25 +45,20 @@ public class NeuralNetwork {
         this.stage = stage;
     }
     
-    public void setLabel(Text label){
-        this.label = label;
-    }
-    
     public void createFake(){
         Network hold;
         hold = new Network("Test Graph");
         hold.setPane(vizPane);
         hold.createFake();
         this.addNetwork(hold);
-        label.setText(hold.getName());
-        hold.connectFake();
+        hold.connectAll();
+        updateList();
     }
     
     public void createNetwork(String text){
         Network hold = new Network(text);
         hold.setPane(vizPane);
         this.addNetwork(hold);
-        label.setText(hold.getName());
     }
     
     public void setup(){
@@ -74,15 +72,15 @@ public class NeuralNetwork {
         hold.DFS(network.getNeuron(a));
     }
     
-    public void searchPaths(Network network, String a, String b){
+    public void searchPaths(Network network, Neuron a, Neuron b){
         Query hold = new Query();
         hold.setGraph(network);
-        hold.DFSpath(network.getNeuron(a),network.getNeuron(b));
+        hold.DFSpath(a,b);
         hold.showSavedPaths();
     }
 
     private void setupTimeline(){
-        keyframe = new KeyFrame(Duration.millis(100), (ActionEvent event) -> {
+        keyframe = new KeyFrame(Duration.millis(1), (ActionEvent event) -> {
             for(Network network : networkArray)
                 network.update();
         });
@@ -92,22 +90,13 @@ public class NeuralNetwork {
     
     private void addNetwork(Network addMe){
         networkArray.add(index,addMe);
+        setupPos(addMe);
         addNeuronsToScene(addMe);
         index++;
     }
     
     private void addNeuronsToScene(Network network){
-        if(network == null)
-            return;
-        for(Neuron a : network.getVertices()){
-            vizPane.getChildren().add(a.getBody());
-        }
-    }
-    
-    private void addConexToScene(Network network){
-        if(network == null)
-            return;
-        for(Connection a : network.getConexs()){
+        for (Neuron a : network.getVertices()) {
             vizPane.getChildren().add(a.getBody());
         }
     }
@@ -121,22 +110,60 @@ public class NeuralNetwork {
     public void openGraph(){
         OpenGraph openGraph = new OpenGraph();
         openGraph.setStage(stage);
-        System.out.println("Stage is set!");
+        
         Network hold = openGraph.open();
         if(hold != null){
             hold.setPane(vizPane);
-            hold.initializeNeurons();
+            hold.reinitializeNeurons();
+            addNetwork(hold);            
             System.out.println("Done loading!");
-            addNetwork(hold);
         }
         else{
             System.out.println("Graph not opened!");
         }
     }
     
-    public void showConex(){
-        networkArray.get(0).createHeadConex((Particle)networkArray.get(0).getVertices().get(0), (Particle)networkArray.get(0).getVertices().get(1));
-        networkArray.get(0).createHeadConex((Particle)networkArray.get(0).getVertices().get(1), (Particle)networkArray.get(0).getVertices().get(2));
+    public ObservableList updateList(){
+        if(nodes == null)
+            nodes = FXCollections.observableArrayList();
+        ArrayList<Neuron> hold = new ArrayList();
+        for(Network a : networkArray){
+            for(Neuron b : a.getVertices()){
+                if(nodes.contains(b));
+                else{
+                    nodes.add(b);
+                }
+            }
+        }
+        return nodes;
     }
+    
+    private void setupPos(Network hold){
+        ArrayList<Neuron> list = hold.getVertices();
+        for(Neuron abe : list){
+            Vector pos = new Vector(getRandomX(abe),getRandomY(abe));
+            Vector vel = new Vector(Math.random() * nodeSpeed, Math.random() * nodeSpeed);
+            abe.setPos(pos, vel);
+        }
+    }
+    
+    private double getRandomX(Neuron a){
+        Double radius = a.getBody().getRadiusX();
+        double width = vizPane.getWidth();
+        double randomNum = Math.random()*width;
+        if(randomNum < 0 + radius || randomNum > width - radius)
+            randomNum = getRandomX(a);
+        return randomNum;
+    }
+    
+    private double getRandomY(Neuron a){
+        Double radius = a.getBody().getRadiusX();
+        double height =  vizPane.getHeight();
+        double randomNum = Math.random()*height;
+        if(randomNum < 0 + radius || randomNum > height - radius)
+            randomNum = getRandomY(a);
+        return randomNum;
+    }
+
 
 }

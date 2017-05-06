@@ -5,6 +5,8 @@
  */
 package visualnetwork;
 
+import javafx.scene.shape.Line;
+
 /**
  *
  * @author Kolbe
@@ -14,6 +16,7 @@ public class Edge implements java.io.Serializable{
     public double weight = 0.0;
     public Edge next = null;
     public Edge parent = null;
+    public Line connection;
     
     public Edge(){
 
