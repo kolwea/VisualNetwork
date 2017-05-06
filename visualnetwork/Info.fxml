@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="visualnetwork.InfoController">
+   <children>
+      <ScrollPane prefHeight="800.0" prefWidth="800.0">
+         <content>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Kolbe WeathingtonKSWKW4DISCLAIMER: This app is currently no more than a glorified graph visualizer. A lot of the code and implementations are behind the scenes and this is me ditch at turning something cool and working in before I break it adding more.GOAL: To build a working system that will be the basis for a weighted “neural” learning algorithm by providing implementation for creating, add, connecting, saving, and loading graphs. A finalized implementation will have function for showing paths between nodes, searching for nodes out of the entirety of the array, and forming “answers” to generalized questions (i.e. what comes up the most when asked about groups of nodes). Final product: MY own Jarvis &gt;_&gt;STATUS: Currently the only working features from the GUI include a visualized depth first search (end results only), loading a test network using “NEW”, loading, and saving of graphs. (Specifically graph 0 in the network array). Features that are implemented but unusable from the GUI is the creation of new “neural network”, the creations of graphs within that network, the combining of multiple graphs into the scene (without connections), creation on new nodes, and a depth first search of all nodes within network." wrappingWidth="800.341796875" />
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

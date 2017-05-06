@@ -4,4 +4,15 @@
 
 .mainFxmlClass {
 
+    .vixPaneBox {
+    -fx-background-color: #f3eff5;
+}
+    .settingsPaneBox {
+    -fx-background-color: #454955;
+    -fx-text-fill: #f3eff5;
+}
+    .vizPaneBox {
+    -fx-background-color: #f3eff5;
+}
+ 
 }

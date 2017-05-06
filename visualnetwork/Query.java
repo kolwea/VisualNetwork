@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
  */
 public class Query extends Thread{
     private Network network;
-    private static int time;
+    private int time;
     private ArrayList<Edge> paths;
     private int index;
     
@@ -41,7 +41,6 @@ public class Query extends Thread{
             a.d = 0;
             a.f = 0;
         }
-//        System.out.println("Initialized for search");
         time = 0;
         for(Neuron a : network.getVertices()){
             if(a.status == Status.WHITE)
@@ -51,14 +50,14 @@ public class Query extends Thread{
     
     public void DFSpath(Neuron start, Neuron search){
         ArrayList<Neuron> vertices = network.getVertices();
-
+        
         for(Neuron a : vertices){
             a.setStatus(Status.WHITE);
             a.parent = null;
             a.d = 0;
             a.f = 0;
         }
-//        System.out.println("Initialized for search");
+        
         time = 0;
         for(Neuron a : network.getAdjList(start)){
             if(a.status == Status.WHITE)
@@ -89,7 +88,6 @@ public class Query extends Thread{
     }
     
     private void DFSpathVisit(Neuron cur, Neuron search){
-        System.out.println("Visitin " + cur.getName());
         if(cur == search){
             savePath(cur);
         }
@@ -134,17 +132,19 @@ public class Query extends Thread{
         System.out.println("Path added at " + index);
     }
     
-    public void showSavedPaths(){              
-        for(Neuron a : network.getVertices()){
-            a.setStatus(Status.WHITE);
-        }
-        for(Edge head : paths){
-            while(head != null){
-                System.out.print(head.neuron.getName() + " : ");
-                head.neuron.setStatus(Status.GREY);
-                head = head.next;
+    public void showSavedPaths(){
+        if(paths != null){
+            for(Edge head : paths){
+                Color ran = head.neuron.randomColor();
+                while(head != null){
+                    Neuron hold = head.neuron;
+                    System.out.print(head.neuron.getName() + " : ");
+                    hold.setStatus(Status.GREY);
+                    hold.getBody().setFill(hold.mixColor((Color)hold.getBody().getFill(),ran));
+                    head = head.next;
+                }
+                System.out.println();
             }
-            System.out.println();
         }
     }
     

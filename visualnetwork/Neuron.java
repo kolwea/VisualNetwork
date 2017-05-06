@@ -5,7 +5,6 @@
  */
 package visualnetwork;
 
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 /**
@@ -23,10 +22,25 @@ public class Neuron extends Particle implements java.io.Serializable{
     
     public Neuron(String name){
         this.name = name;
-        this.initial();
-//        System.out.println("Setup for " + name + " completed.");
+        this.initialBody();
     }
     
+    @Override
+    public void update(Double boundX, Double boundY) {
+        Double radius = this.getBody().getRadiusX();
+        if(pos.x + radius > boundX || pos.x < radius)
+            vel.x = -1 * vel.x;
+        if(pos.y + radius> boundY || pos.y < radius)
+            vel.y = -1 * vel.y;
+        pos = pos.add(vel);
+        getBody().setCenterX(pos.x);
+        getBody().setCenterY(pos.y);
+    }    
+        
+    public void setName(String name){
+        this.name = name;
+    }
+
     public String getName(){
         return this.name;
     }
@@ -38,43 +52,19 @@ public class Neuron extends Particle implements java.io.Serializable{
     public int getIndex(){
         return index;
     }
-
+    
     public void setStatus(Status a) {
         this.status = a;
-        if(null != status)switch (status) {
-            case WHITE:
-                this.getBody().setFill(Color.ANTIQUEWHITE);
-                break;
-            case GREY:
-                this.getBody().setFill(Color.GREY);
-                break;
-            case BLACK:
-                this.getBody().setFill(Color.BLACK);
-                break;
-            default:
-                break;
-        }
+    }
+    
+    public Status getStatus(){
+        return this.status;
     }
     
     @Override
-    public void update() {
-        if(pos.x > this.getPane().getWidth() || pos.x < 0)
-            vel.x = -1 * vel.x;
-        if(pos.y > this.getPane().getHeight() || pos.y < 0)
-            vel.y = -1 * vel.y;
-        pos = pos.add(vel);
-        getBody().setCenterX(pos.x);
-        getBody().setCenterY(pos.y);
-//        if(this.getLines() != null){
-//            this.updateLines(head);
-//        }
-//        if(this.getName().compareTo("Wood") == 0)
-//            System.out.println("X: " + this.pos.x + " Y: " + this.pos.y);
-//        label.setX(pos.x);
-//        label.setY(pos.y);
-    }    
-    
-    
+    public String toString(){
+        return this.getName();
+    }
     
 }
 
