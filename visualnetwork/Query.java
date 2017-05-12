@@ -59,9 +59,16 @@ public class Query extends Thread{
         }
         
         time = 0;
-        for(Neuron a : network.getAdjList(start)){
-            if(a.status == Status.WHITE)
-                DFSpathVisit(a, search);
+//        for(Neuron a : network.getAdjList(start)){
+//            if(a.status == Status.WHITE)
+//                DFSpathVisit(a, search);
+//        }
+        
+        Edge hold = network.getAdjHead(start);
+        while(hold != null){
+            if(hold.neuron.status == Status.WHITE)
+                DFSpathVisit(hold.neuron, search);
+            hold = hold.next;
         }
     }
     

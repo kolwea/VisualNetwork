@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
@@ -32,6 +33,9 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private Label label;
+    
+    @FXML
+    private ColorPicker color;
     
     @FXML
     private AnchorPane window;
@@ -204,6 +208,11 @@ public class FXMLDocumentController implements Initializable {
     public void openInfo(){
         Controllerteer hold = new Controllerteer(this);
         hold.openInfo();
+    }
+    
+    public void changeColor(){
+        color.getCustomColors().get(0);
+        
     }
    
     

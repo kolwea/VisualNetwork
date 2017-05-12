@@ -82,7 +82,7 @@ public abstract class Particle{
             Double x = (this.body.getCenterX() * update.getBody().getCenterX());
             Double y = (this.body.getCenterY() * update.getBody().getCenterY());
             Double dis = Math.sqrt(x+y);
-            Double slope = (3.0 - 0.1) / 5000.0;
+            Double slope = (2.0 - 0.1) / 3000.0;
             Double output = 0.1 + slope * dis;
             head.connection.setStrokeWidth(Math.pow(output, 2));
             head = head.next;    

@@ -83,6 +83,34 @@ public class Network extends Graph implements java.io.Serializable{
         addNewNeuron(new Neuron("X1"));
         addNewNeuron(new Neuron("Y1"));
         addNewNeuron(new Neuron("Z1"));
+                
+//        addNewNeuron(new Neuron("A2"));
+//        addNewNeuron(new Neuron("B2"));
+//        addNewNeuron(new Neuron("C2"));
+//        addNewNeuron(new Neuron("D2"));
+//        addNewNeuron(new Neuron("E2"));
+//        addNewNeuron(new Neuron("F2"));
+//        addNewNeuron(new Neuron("G2"));        
+//        addNewNeuron(new Neuron("H2"));
+//        addNewNeuron(new Neuron("I2"));
+//        addNewNeuron(new Neuron("J2"));
+//        addNewNeuron(new Neuron("K2"));
+//        addNewNeuron(new Neuron("L2"));
+//        addNewNeuron(new Neuron("M2"));
+//        addNewNeuron(new Neuron("N2"));
+//        addNewNeuron(new Neuron("O2"));
+//        addNewNeuron(new Neuron("P2"));
+//        addNewNeuron(new Neuron("Q2"));
+//        addNewNeuron(new Neuron("R2"));
+//        addNewNeuron(new Neuron("S2"));
+//        addNewNeuron(new Neuron("T2"));
+//        addNewNeuron(new Neuron("U2"));        
+//        addNewNeuron(new Neuron("V2"));
+//        addNewNeuron(new Neuron("W2"));
+//        addNewNeuron(new Neuron("X2"));
+//        addNewNeuron(new Neuron("Y2"));
+//        addNewNeuron(new Neuron("Z2"));
+        
     }
 
     /**
@@ -143,15 +171,6 @@ public class Network extends Graph implements java.io.Serializable{
    
     public ArrayList<Neuron> getVertices(){
         return vertices;
-    }
-    
-    private int getIndex(String name){
-        int returnMe = -1;
-        for(Neuron a : vertices){
-            if(a.getName().compareTo(name) == 0)
-                returnMe = a.getIndex();
-        }
-        return returnMe;
     }
     
     public static void bumpIndex(){
