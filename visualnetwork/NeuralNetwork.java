@@ -41,8 +41,8 @@ public class NeuralNetwork {
         vizPane = pane;
     }
     
-    public void setStage(Stage stage){
-        this.stage = stage;
+    public AnchorPane getPane(){
+        return vizPane;
     }
     
     public void createFake(){
@@ -66,10 +66,10 @@ public class NeuralNetwork {
         timeline.play();
     }
     
-    public void search(Network network, String a){
+    public void search(Network network, Neuron a){
         Query hold = new Query();
         hold.setGraph(network);
-        hold.DFS(network.getNeuron(a));
+        hold.DFS(a);
     }
     
     public void searchPaths(Network network, Neuron a, Neuron b){
@@ -87,20 +87,7 @@ public class NeuralNetwork {
         timeline = new Timeline(keyframe);
         timeline.setCycleCount(Animation.INDEFINITE);
     }
-    
-    private void addNetwork(Network addMe){
-        networkArray.add(index,addMe);
-        setupPos(addMe);
-        addNeuronsToScene(addMe);
-        index++;
-    }
-    
-    private void addNeuronsToScene(Network network){
-        for (Neuron a : network.getVertices()) {
-            vizPane.getChildren().add(a.getBody());
-        }
-    }
-    
+      
     public void saveGraph(Network network){
         SaveGraph saveGraph = new SaveGraph();
         saveGraph.setStage(stage);
@@ -122,6 +109,19 @@ public class NeuralNetwork {
             System.out.println("Graph not opened!");
         }
     }
+        
+    private void addNetwork(Network addMe){
+        networkArray.add(index,addMe);
+        updatePos(addMe);
+        updateScene(addMe);
+        index++;
+    }
+    
+    private void updateScene(Network network){
+        for (Neuron a : network.getVertices()) {
+            vizPane.getChildren().add(a.getBody());
+        }
+    }
     
     public ObservableList updateList(){
         if(nodes == null)
@@ -130,20 +130,21 @@ public class NeuralNetwork {
         for(Network a : networkArray){
             for(Neuron b : a.getVertices()){
                 if(nodes.contains(b));
-                else{
+                else
                     nodes.add(b);
-                }
             }
         }
         return nodes;
     }
     
-    private void setupPos(Network hold){
+    private void updatePos(Network hold){
         ArrayList<Neuron> list = hold.getVertices();
         for(Neuron abe : list){
-            Vector pos = new Vector(getRandomX(abe),getRandomY(abe));
-            Vector vel = new Vector(Math.random() * nodeSpeed, Math.random() * nodeSpeed);
-            abe.setPos(pos, vel);
+            if(abe.getPos() == null){
+                Vector pos = new Vector(getRandomX(abe),getRandomY(abe));
+                Vector vel = new Vector(Math.random() * nodeSpeed, Math.random() * nodeSpeed);
+                abe.setPos(pos, vel);
+            }
         }
     }
     
